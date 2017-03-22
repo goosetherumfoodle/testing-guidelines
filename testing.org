@@ -1,4 +1,4 @@
-- add bit about coupling to implementation in *qualities*
+- add bit about coupling to implementation in *qualities* - robust?
 - learning: dep inj
 - feature -> end-to-end
 - end-to-end
@@ -228,6 +228,82 @@
 *** Command Methods
     Since we need to test the outgoing messages from our command
     method, we use mocks.
+* End-To-End
+  An end-to-end test simulates the user experience. For most
+  applications that means that both the test excercise and the
+  expectations take place in the UI. An example would be filling in
+  the username and password form, clicking "submit", and expecting to
+  see the message "Thanks for signing up!". It does not reach down
+  below the UI. So in this example, we would not be then checking the
+  database to verify that the user exists.
+
+** Good
+  End-to-end tests are valuable because they can simulate the workflow
+  that a real user would have. They are also the only tests which
+  touch every layer of the system.
+
+  End-to-end tests are also the easiest for non-programmer staff to
+  read and understand. This can help get test suite buy-in from
+  non-programmer staff.
+
+  End-to-end tests are also the least likely to lie about the
+  functionality of the system, since they (typically) have no test
+  doubles. All of the code excercised in the tests is real code.
+
+  They allow for a BDD workflow, if they are kept lightweight and fast
+  enough.
+
+  Because of these qualities they are a necessary part of the app.
+
+** Bad
+   In most applications the end-to-end tests are necessarily the
+   slowest tests. They are the slowest because they
+   involve every layer of the app, and the tools that run them are
+   typically slower than other testing tools. For web applications
+   most end-to-end tests have to actually open up a browser.
+
+   End-to-end tests are also the most brittle tests. They end up being
+   tightly coupled to the UI, since they have to read and write to it,
+   and the UI is the app layer which is subject to the most
+   change. Because they're so brittle, each end-to-end test added
+   brings a higher long-term maintenance cost than
+
+** Ugly
+   The classic [[inverted-pyramid][inverted pyramid]] tends to happen for a reason. The
+   benefits of end-to-end tests are obvious, while its drawbacks are
+   subtle and pernicious.
+
+   The fact that they are easy for non-programmer staff to read (and
+   sometimes write, depending on the tools used), often leads them to
+   be over-valued by the business.
+
+   It is common for end-to-end tests to be the start of a downward
+   spiral of maintanence costs. Because they are easy to write, and
+   one end-to-end tests can touch many parts of the codebase at once,
+   teams that feel they "don't have time for unit testing" will write
+   end-to-end tests instead. Espeically because the end-to-end tests
+   can be written by non-programmers.
+
+   Where the pernicious costs of end-to-end tests start to come into
+   play is when people start trying to cover corner cases (basically
+   anything except the happy path). A mature application will have
+   several layers interacting with eachother, and people will
+   eventually realize that they need to cover all the possible
+   interactions between those layers. Trying to cover all the
+   possibilities of those interactions from end-to-end tests will
+   bloat the number of required tests exponentially. (See Integration
+   Tests Are A Scam in the references).
+
+   Over time the end-to-end tests, which originally were seen as saving
+   time, will be so slow and brittle that programmers will want
+   nothing to do with them. Many teams end up needing to hire people
+   soley to maintain their test suite, because it's become such a
+   maintenance burden. And having a test suite maintained by people
+   who aren't actually writing the code being tested leads to its own
+   class of issues.
+
+** implementing
+   happy path!
 * Integration Tests
 * Reference
 ** Testing Pyramid
@@ -239,8 +315,11 @@
    [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
    [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
 *** Inverted Pyramid
+    :PROPERTIES:
+    :ID:       inverted-pyramid
+    :END:
+    http://blogs.agilefaqs.com/2011/02/01/inverting-the-testing-pyramid/
     [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
-    [[https://www.youtube.com/watch?v%3DVDfX44fZoMc][Integration Tests
-    Are A Scam (Influential Talk)]]
+    [[https://www.youtube.com/watch?v%253DVDfX44fZoMc][Integration Tests Are A Scam (oft-cited talk)]]
 * Extra-credit
   - Property-based testing.
