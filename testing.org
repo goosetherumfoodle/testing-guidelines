@@ -1,3 +1,9 @@
+- add bit about coupling to implementation in *qualities*
+- learning: dep inj
+- feature -> end-to-end
+- end-to-end
+- integration
+- tdd/bdd
 * Definitions
 - SUT
   Subject Under Test. The thing being tested. In OO unit tests, it
@@ -20,6 +26,19 @@
   some pernicious bugs will have a tendancy to re-appear (often due to
   a misunderstanding of the domain by the development team), and good
   regression tests help prevent their re-appearance.
+- Test Double
+  Any code created to stand in for another item in a test suite. Kinds
+  of test doubles are:
+  - Stubs
+    These simply return a fixed response
+  - Fakes
+    Test fakes have more logic than a stub, for instances in which the
+    double needs to do something more than just return a fixed
+    response. These should be used only in moderation.
+  - Mocks
+    A mock is a test double that assertions can be made about.
+  - Spy
+    A specific way of making a mock.
 
 * Test Suite Layers
 - Unit
@@ -64,13 +83,25 @@
   A good test suite is:
 ** Focused
     The logic to be tested is contained in as small and isolated a SUT
-    as possible.
+    as possible. Ideally a change/break in logic should only break tests in
+    two places. Once at the Unit level, or possibly Integration, and
+    optionally once at the Feature level. A focused test suite is
+    the result of applying the [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]] to the
+    test, pushing the test to the lowest layer possible (as per the
+    testing pyramid), and knowing what *not* to test.
+
+    A focused test suite will emphasize testing SUTs that are:
+    - heavy on logic/math
+    - less prone to frequent changes
+    - valuable (at the core of the app, used frequently, and critical
+      to the business)
 ** Fast
-    The slower a test suite is, the less often it will be run. The
-    less often a test suite is run, the longer the gap will be between
-    creating a bug, and discovering the bug. The longer this gap is,
-    the harder the bug will be to diagnose and fix. Fast test suites
-    enable smart testing practices like TDD.
+    The faster a test suite is, the more often it will be run. The
+    more often a test suite is run, the shorter the gap will be between
+    creating a bug, and discovering the bug. The shorter this gap is,
+    the easier the bug will be to diagnose and fix.
+
+    Fast test suites enable smart testing practices like TDD.
 
     A fast test suite will encourage writing fast tests, which
     encourages a proper testing pyramid because well-written unit
@@ -82,22 +113,134 @@
 ** Concrete
    Abstractions in tests are less desirable than abstractions in
    application code. It is better for a test to be verbose, than to
-   hide what is going on. [[(See Mystery Guest / Obscure Test]])
+   hide what is going on. (See [[http://xunitpatterns.com/Obscure%2520Test.html][obscure test]])
 
-   Assert literal values whenever possible (See [[Ugly
-   Mirror]]). Assertions should not compare values computed by the
+   Assert literal values whenever possible (See [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][ugly mirror]]).
+   Assertions should not compare values computed by the
    application, to values computed by the tests. Ideally assertions
    should be comparing computed values to hard-coded values. Often if
-   it seems like the expected value must be computed, a [[Golden Master]]
+   it seems like the expected value must be computed, a [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][golden master]]
    can be used instead.
+** Undesirable qualities
+    For comparison's sake, a painful/expensive test suite is:
+*** Scattershot
+     The tests are wide in scope. Breaking some piece of application
+     logic will sometimes result in no additional test failures, but
+     at other times will result in several tests breaking all at
+     once.
+
+     Scattershot tests give no indication to future developers what is
+     to be tested or how, and will lead to more scattershot tests.
+
+     The scattershot test suite will emphasize SUTs that are:
+     - mostly glue code
+     - constantly changing
+     - at the edges of the system, and not critical
+     - A good example of these is a test suite that has more view/GUI
+       tests than anything else
+*** Slow
+     Slow tests suites will rarely be run by developers. Often they
+     will end up just being caught by the CI system, because instead
+     of wasting time running them locally developers will just rely on
+     the CI system to catch failures. Sometimes days
+     will pass between a bug being created, and being flagged by the
+     test suite. This delay means that the developer might not
+     remember the context the bug was created in, or might have to
+     make significant changes to the code, due to the bug effecting
+     architectural decisions.
+
+     Fast test suites make TDD impossible.
+
+     Slow test suites tend to fall into disuse and thereby are often
+     the first step towards a legacy test suite that no developer
+     wants to touch, requires dedicated staff to maintain, and
+     provides relatively little value.
+*** Obscure
+     A badly written test suite can take longer to understand than
+     just reading the SUT itself. It will verify logic, but will give
+     no indication of why that logic is important, or how the SUT is to
+     be used.
+*** Abstract
+     Bad test suites will use abstraction to achieve concision and
+     avoid textual repetition.
+
+     The tests will compute values to compare to values computed by
+     the application. Errors like returning a bad value won't be
+     caught because the logic in the test returns the same bad value.
+* Unit Tests
+  "Unit testing" has become such a vaunted idea that the usage of the
+  term has become more widespread than the understanding of the ideas
+  behind it.
+
+  There is no fixed definition of "unit," across all projects. A unit
+  is a chunk of logic/data which makes sense to test atomically, and
+  this will vary in different applications. In object-oriented
+  contexts, it almost always refers to an object. In functional
+  contexts it usually refers to a function. The important thing is
+  that the team on a project has a shared understanding of what the
+  unit is.
+
+  I'm assuming an OO context for these notes.
+
+** What to test
+   A good unit test will treat the object it is testing as a black
+   box. It will only test the objects interface (as defined by the
+   object's public methods).
+
+   How to test these methods depends on whether they are *query* or
+   *command* methods.
+*** Query Methods
+   A query method only computes and returns values. It has no stateful
+   effects on the rest of the system (like writing to a
+   database). But it can call query methods on other objects in the
+   process. A basic test of a query method consists of sending the
+   object a message, and verifying the correctness of the response.
+
+   If the query method in turn sends a message to another object, that
+   outgoing message does *not* get tested here. That message is part
+   of the other object's interface, and should be properly tested in
+   that separate context.
+*** Command Methods
+   A command method is one which will send messages to other parts of
+   the system, which effect stateful change. An example is a method
+   which changes the state of another object, and saves it's value to
+   a database.
+
+   Unlike query methods, the return values of command methods should
+   *not* be tested. Instead their outgoing messages should be tested,
+   usually with mocks.
+** Isolation
+   Unit tests are supposed to test objects in isolation. But our
+   objects are dependent on the interfaces of other objects, the
+   filesystem, our database, etc. So we use test doubles to enforce
+   the boundaries of what we want to test.
+
+   These techniques should not be used dogmatically. There are
+   benefits and costs to using test doubles. And the costs will be
+   higher in systems that aren't well-factored. While they shouldn't
+   be used in all cases, in a real suite of unit tests cannot
+   be created without test doubles (in an object oriented system).
+
+*** Query Methods
+    Because we aren't testing the outgoing messages from our query
+    methods, then we will use stubs to enforce the boundaries of our
+    tests.
+*** Command Methods
+    Since we need to test the outgoing messages from our command
+    method, we use mocks.
+* Integration Tests
 * Reference
-** Danger of too much end-to-end testing
-  [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
-  [[https://www.youtube.com/watch?v%3DVDfX44fZoMc][Integration Tests Are A Scam (Influential Talk)]]
 ** Testing Pyramid
    [[https://martinfowler.com/bliki/TestPyramid.html]]
 ** Patterns
+   [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]]
    [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][Golden Master]]
 ** Anti-patterns
    [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
    [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
+*** Inverted Pyramid
+    [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
+    [[https://www.youtube.com/watch?v%3DVDfX44fZoMc][Integration Tests
+    Are A Scam (Influential Talk)]]
+* Extra-credit
+  - Property-based testing.
