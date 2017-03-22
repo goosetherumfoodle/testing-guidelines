@@ -303,7 +303,46 @@
    class of issues.
 
 ** implementing
-   happy path!
+   How to take advantage of end-to-end tests while avoiding the
+   pitfalls?
+*** Judicious
+    Because of the long-term maintenance expense of these tests, the
+    value proposition should be high. A good end-to-end test will
+    cover critical features. "Critical" here should be a high bar.
+    Critical as in: each minute this feature isn't working, our
+    company loses money.
+
+    A good example is testing that users can signup, and pay for an
+    item with a credit card.
+
+    A bad example would be testing that the user's email appears in
+    the proper format on the user settings page. A bug here is
+    annoying but not critical.
+*** Comprehensive
+    Since each test is expensive, it should be as comprehensive as
+    possible. Unlike unit tests, which aim to cover one and only one
+    thing, a good end-to-end test should cover as much (crticical)
+    functionality as possible in as few tests as possible.
+
+    So rather than writing 4 seperate tests for 1: signging up, 2:
+    logging in, 3: sending money to my Dad, and 4: purchasing a new
+    horse, we should write one test that does all of the above.
+*** Optimistic
+    End-to-end tests should only cover the happy path. Corner cases
+    should be covered in a lower-level test.
+
+    For example: Instead of testing that every possible error case
+    results in a sensible message in the UI, we could instead just
+    test that error messages in general (by verifying just one of
+    them), and then in a lower-level test we can verify that all the
+    correct user-facing error messages are generated in the correct
+    cases.
+*** Well-maintained
+    Since end-to-end tests tend to be the quickest test to fall into
+    disfavor with programmers, they need to be vigilantly maintained
+    to be relevant, and as fast as possible. As soon as they become
+    neglected and out-of-date, they are at risk of kicking off the
+    downward spiral of maintenance costs.
 * Integration Tests
 * Reference
 ** Testing Pyramid
