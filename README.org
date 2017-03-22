@@ -1,6 +1,7 @@
-- add bit about coupling to implementation in *qualities* - robust?
-- learning: dep inj
-- integration
+* Remaining bits to add
+- add bit about decoupling from implementation in *qualities* - robust?
+- learning from tests
+  - dep inj
 - tdd/bdd
 * Definitions
 - SUT
