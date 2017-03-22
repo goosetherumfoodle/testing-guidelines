@@ -1,7 +1,5 @@
 - add bit about coupling to implementation in *qualities* - robust?
 - learning: dep inj
-- feature -> end-to-end
-- end-to-end
 - integration
 - tdd/bdd
 * Definitions
@@ -45,13 +43,13 @@
   Unit tests isolate the smallest piece of behavior possible. In OO
   this will usually be an object. "Unit" is subjective, and will be
   defined differently in different domains.
-- Feature/End-To-End/Acceptance/UI
-  This is the highest level of testing. The SUT is a chunk of
-  behavior, a feature, rather than a chunk of code. "End-To-End" means
+- End-To-End/Feature/Acceptance/UI
+  This is the highest level of testing. "End-To-End" means
   that you are only testing what is at the outer layers of the
-  application (usually the UI). "Acceptance test" is a feature test
-  written to be a true verification of the acceptance critieria of a
-  user story.
+  application (usually the UI). "Feature tests" means the SUT is a
+  chunk of behavior, a feature, rather than a chunk of
+  code. "Acceptance test" is a feature test written to be a automated
+  verification of the acceptance critieria of a user story.
 - Integration/Service
   Integration tests are everything that isn't End-To-End, but that
   involves multiple pieces working together. What that means depends
@@ -62,9 +60,10 @@
    testing pyramid.
 *** testing pyramid
     [[./test_pyramid.gif]]
+
     The classic testing pyramid says that the bulk of the tests should
     be unit tests. A far smaller number of tests should be integration
-    tests. And and even smaller number than that should be Feature tests.
+    tests. And and even smaller number than that should be end-to-end tests.
 
     The main goal of the testing pyramid is cost
     effectiveness. It is a necessary reminder because its opposite,
@@ -85,7 +84,7 @@
     The logic to be tested is contained in as small and isolated a SUT
     as possible. Ideally a change/break in logic should only break tests in
     two places. Once at the Unit level, or possibly Integration, and
-    optionally once at the Feature level. A focused test suite is
+    optionally once at the end-to-end level. A focused test suite is
     the result of applying the [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]] to the
     test, pushing the test to the lowest layer possible (as per the
     testing pyramid), and knowing what *not* to test.
@@ -344,10 +343,73 @@
     neglected and out-of-date, they are at risk of kicking off the
     downward spiral of maintenance costs.
 * Integration Tests
+  "Integration" my is a catch-all term for everything that involves more
+  functionality than a unit test, but is lower-level than a UI
+  test. People use lots of different denote this layer, and there are
+  a large number of test types that fall into this general category.
+
+  As a general rule, any logic in an integration test that can be
+  fully tested in a unit test, should be moved to a unit test.
+
+** Classic Integration test
+   A classic case for an integration test would be a test that covers
+   the interactions between 2-3 objects in the system. For example:
+   You originally had a single object that was covered by a unit test,
+   but due to changing requirements, it started to take on too much
+   responsibility, and so you've factored the logic out into multiple
+   smaller objects. While doing so you probably created unit tests for
+   each object, but in order to cover all the logical cases of the
+   pre-refactoring unit test, you write an integration test which
+   tests for the correct interaction between your new smaller objects.
+
+   Another typical integration test scenario is testing saved database
+   queries. These tests are important, but they are not unit tests
+   because they are cutting across layers in the system (from the app
+   to the database). This doesn't make them bad tests, but it should
+   be noted. If you have several objects that need to call into the
+   database, a good practice is to stub/mock the database call in the
+   individual objects unit test, and have a separate group of
+   integration tests to verify the actual database queries. This
+   segregation will A: keep the test suite from becoming bogged down
+   with slow database queries, and B: keep the testing of the query
+   logic in one place. If a database schema changes in a bad way, we
+   want just a couple tests to break at most, rather than a scenario
+   in which 20 tests need to be updated because they were all relying
+   on relevant queries.
+
+** API
+   Tests of an internal API fall into this category. Similar to unit
+   tests, API calls that are "queries" should only test the
+   value that is returned, and API calls that are "commands" should
+   verify that the correct message was sent.
+
+   Example: An API call to retrieve a list of users should only
+   verify that the returned list has the correct contents in the
+   correct format. Testing *what* database call is used makes our test
+   too tightly coupled to that implementation (in the future we may
+   decide to cache that query and not hit the database at all, or use
+   a different query).
+
+   An API call that sets a users password however, should verify that
+   the proper state update took place, and that the database was
+   updated with the correct information.
+
+   API's to an internal service are the boundaries of that
+   service. And so from one perspective they are the end-to-end tests
+   of that service. Over-specified API tests can have similar
+   drawbacks to a bad end-to-end test suite.
+
+** Subcutaneous Test
+   A [[https://martinfowler.com/bliki/SubcutaneousTest.html][subcutaneous test]] is like an end-to-end test, except it takes
+   place just below the UI. These can be great for something that
+   should be an end-to-end test, but where the effort of simulating IU
+   interaction would be too much work.
+
 * Reference
 ** Testing Pyramid
    [[https://martinfowler.com/bliki/TestPyramid.html]]
 ** Patterns
+   [[https://martinfowler.com/bliki/SubcutaneousTest.html][Subcutaneous Test]]
    [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]]
    [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][Golden Master]]
 ** Anti-patterns
