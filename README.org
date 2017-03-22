@@ -1,8 +1,9 @@
 * Remaining bits to add
-- add bit about decoupling from implementation in *qualities* - robust?
 - learning from tests
   - dep inj
+  - first re-use of code
 - tdd/bdd
+- practices by novice, intermediate, and advanced
 * Definitions
 - SUT
   Subject Under Test. The thing being tested. In OO unit tests, it
@@ -37,7 +38,7 @@
   - Mocks
     A mock is a test double that assertions can be made about.
   - Spy
-    A specific way of making a mock.
+    A specific way of making a mock. (not going to be covered here).
 
 * Test Suite Layers
 - Unit
@@ -84,7 +85,7 @@
 ** Focused
     The logic to be tested is contained in as small and isolated a SUT
     as possible. Ideally a change/break in logic should only break tests in
-    two places. Once at the Unit level, or possibly Integration, and
+    a couple of places. Once at the Unit level, or possibly Integration, and
     optionally once at the end-to-end level. A focused test suite is
     the result of applying the [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]] to the
     test, pushing the test to the lowest layer possible (as per the
@@ -121,6 +122,16 @@
    should be comparing computed values to hard-coded values. Often if
    it seems like the expected value must be computed, a [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][golden master]]
    can be used instead.
+** Flexible
+   A good test suite will withstand refactorings in application code
+   without needing to be changed. It is important that, as much as
+   possible, failures in the test suite are *useful* failures.
+
+   This is achieved with by following best practices to *decouple* the
+   test code from the application code. This is easier said than
+   done, and largely depends on how well the application code is
+   designed. Beyond that, learning what not to test is important for this.
+
 ** Undesirable qualities
     For comparison's sake, a painful/expensive test suite is:
 *** Scattershot
@@ -167,6 +178,15 @@
      The tests will compute values to compare to values computed by
      the application. Errors like returning a bad value won't be
      caught because the logic in the test returns the same bad value.
+*** Brittle
+    Bad tests are so tightly coupled to the application code that will
+    need to be updated every time there's an update to the application
+    code, regardless of the importance of the change.
+
+    Brittle test suites eventually become abandoned test suites,
+    because they will require lots of work to update, but the failures
+    will not be instructive so people will stop pyaing attention to them.
+
 * Unit Tests
   "Unit testing" has become such a vaunted idea that the usage of the
   term has become more widespread than the understanding of the ideas
@@ -189,6 +209,7 @@
 
    How to test these methods depends on whether they are *query* or
    *command* methods.
+
 *** Query Methods
    A query method only computes and returns values. It has no stateful
    effects on the rest of the system (like writing to a
@@ -324,7 +345,7 @@
     thing, a good end-to-end test should cover as much (crticical)
     functionality as possible in as few tests as possible.
 
-    So rather than writing 4 seperate tests for 1: signging up, 2:
+    So rather than writing 4 seperate tests for 1: signing up, 2:
     logging in, 3: sending money to my Dad, and 4: purchasing a new
     horse, we should write one test that does all of the above.
 *** Optimistic
