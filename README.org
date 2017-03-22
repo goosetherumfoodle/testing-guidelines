@@ -458,17 +458,21 @@
    looking
 * Reference
 ** Testing Pyramid
-   [[https://martinfowler.com/bliki/TestPyramid.html]]
+   - [[https://martinfowler.com/bliki/TestPyramid.html]]
 ** Patterns
-   [[https://martinfowler.com/bliki/SubcutaneousTest.html][Subcutaneous Test]]
-
-   [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]]
-
-   [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][Golden Master]]
+   - [[https://martinfowler.com/bliki/SubcutaneousTest.html][Subcutaneous Test]]
+   - [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]]
+   - [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][Golden Master]]
 ** Anti-patterns
-   [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
+   - [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
+   - [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
+** Books
+   - Sandi Metz
+     - [[http://www.poodr.com/][Practical Object Oriented Design in Ruby]]
+     - [[https://www.sandimetz.com/99bottles/][99 Bottles of OOP]]
+   - Martin Fowler
+     - [[https://martinfowler.com/books/refactoring.html][Refactoring]]
 
-   [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
 *** Inverted Pyramid
     :PROPERTIES:
     :ID:       inverted-pyramid
