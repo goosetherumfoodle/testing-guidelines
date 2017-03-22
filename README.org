@@ -427,15 +427,47 @@
    should be an end-to-end test, but where the effort of simulating IU
    interaction would be too much work.
 
+* Practices
+** Novice
+   Novices to testing will tend to write tests with gaps in the
+   coverage of critical logic, and that are too tightly coupled to
+   implementation. Because the coupling causes the tests to be
+   brittle, and suboptimal choices of *what* code to test results in
+   test suites not catching bugs, the experience will be that of
+   spending lots of time on the test suite while getting little value
+   out of it.
+
+   So the main goal of someone new to testing should be developing a
+   feeling for what to test and how to test it.
+
+   Badly factored code cannot be easily tested. Good testing practices
+   will not be helpful if they're not accompanied by an understanding
+   of Object Oriented design (assuming an OO context) and refactoring
+   practices.
+
+   Sandi Metz's books are exellent resources on OO design
+   - [[http://www.poodr.com/][Practical Object Oriented Design in Ruby]]
+   - [[https://www.sandimetz.com/99bottles/][99 Bottles of OOP]]
+
+   Martin Fowler wrote the definitive book on refactoring
+   - [[https://martinfowler.com/books/refactoring.html][Refactoring:
+     Improving The Design of Existing Code]]
+** Intermediate
+   Once a programmer has a solid grasp of design principles under
+   their belt, and can write valuable tests, then the next step is
+   looking
 * Reference
 ** Testing Pyramid
    [[https://martinfowler.com/bliki/TestPyramid.html]]
 ** Patterns
    [[https://martinfowler.com/bliki/SubcutaneousTest.html][Subcutaneous Test]]
+
    [[https://8thlight.com/blog/uncle-bob/2014/05/08/SingleReponsibilityPrinciple.html][single responsibility principle]]
+
    [[http://blog.codeclimate.com/blog/2014/02/20/gold-master-testing/][Golden Master]]
 ** Anti-patterns
    [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
+
    [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
 *** Inverted Pyramid
     :PROPERTIES:
