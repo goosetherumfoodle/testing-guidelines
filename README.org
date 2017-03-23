@@ -509,6 +509,13 @@
 ** Anti-patterns
    - [[http://xunitpatterns.com/Obscure%2520Test.html][Mystery Guest / Obscure Test]]
    - [[http://jasonrudolph.com/blog/2008/07/30/testing-anti-patterns-the-ugly-mirror/][Ugly Mirror]]
+*** Inverted Pyramid
+    :PROPERTIES:
+    :ID:       inverted-pyramid
+    :END:
+    - http://blogs.agilefaqs.com/2011/02/01/inverting-the-testing-pyramid/
+    - [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
+    - [[https://www.youtube.com/watch?v%253DVDfX44fZoMc][Integration Tests Are A Scam (oft-cited talk)]]
 ** Books
    - Sandi Metz
      - [[http://www.poodr.com/][Practical Object Oriented Design in Ruby]]
@@ -519,11 +526,3 @@
      - [[https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530/][Test Driven Development]]
    - Steve Freeman
      - [[https://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627][Growing Object Oriented Software, Guided by Tests]]
-
-*** Inverted Pyramid
-    :PROPERTIES:
-    :ID:       inverted-pyramid
-    :END:
-    http://blogs.agilefaqs.com/2011/02/01/inverting-the-testing-pyramid/
-    [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
-    [[https://www.youtube.com/watch?v%253DVDfX44fZoMc][Integration Tests Are A Scam (oft-cited talk)]]
