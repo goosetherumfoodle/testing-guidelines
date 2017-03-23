@@ -32,7 +32,8 @@
   - Mocks
     A mock is a test double that assertions can be made about.
   - Spy
-    A specific way of making a mock. (not going to be covered here).
+    A specific way of making a mock. (Only listed for completeness.
+    Not going to be covered here).
 
 * Test Suite Layers
 - Unit
