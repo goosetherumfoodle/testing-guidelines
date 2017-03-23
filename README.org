@@ -1,9 +1,3 @@
-* Remaining bits to add
-- learning from tests
-  - dep inj
-  - first re-use of code
-- tdd/bdd
-- practices by novice, intermediate, and advanced
 * Definitions
 - SUT
   Subject Under Test. The thing being tested. In OO unit tests, it
@@ -455,7 +449,56 @@
 ** Intermediate
    Once a programmer has a solid grasp of design principles under
    their belt, and can write valuable tests, then the next step is
-   looking
+   learning how to let your tests inform your application design.
+
+   Well written code is easy to change. Code that is easy to change
+   follows the single responsibility principle (so changes are
+   isolated), and is loosly coupled to the system around it.
+
+   Tests are the first code reuse. This means that testing application
+   code in a unit test is effectively using the code in a new
+   context. Using the code in a new context will make any coupling to
+   the rest of the system immediately obvious.
+
+   Code that has lots of dependencies and is heavily coupled to the
+   system around it will require lots of annoying setup in the
+   tests. If the code is to be isolated, then all of the objects that
+   the code depends on will need to be replaced with test doubles. In
+   this way test can give immediate design feedback.
+
+*** Test Driven Development
+
+    TDD is the best way to allow information from your tests to guide
+    your design. Writing the test first puts you into the mindset of
+    first-and-formost thinking about the interface of your object and
+    the dependencies it requires.
+
+    The red-green-refactor cycle results in good test coverage of the
+    logic in your code, and allows for an iterative development style
+    driven by the goals set out by the test.
+
+    (See Kent Beck's [[https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530/][Test Driven Development]])
+
+*** Behavior Driven Development
+
+    BDD is a style of TDD in which the application logic is written
+    from the outside in. This workflow allows for maximum design
+    benefit to be derived from the tests.
+
+    Working from the outside in means that by the time you get to
+    implementing the logic in your objects, you've already seen what
+    their interface needs to be.
+
+    Programmers tend to work in the opposite direction, from the
+    inside out. Working inside out inevitably leads to guessing about
+    what will be needed from the object interface. This results in
+    wasted time on code that ultimately won't be used.
+
+    (For a detailed treatment of this style of development see
+    [[https://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627][Growing Object Oriented Software, Guided by Tests]])
+
+** Advanced
+   - Property-based testing
 * Reference
 ** Testing Pyramid
    - [[https://martinfowler.com/bliki/TestPyramid.html]]
@@ -472,6 +515,10 @@
      - [[https://www.sandimetz.com/99bottles/][99 Bottles of OOP]]
    - Martin Fowler
      - [[https://martinfowler.com/books/refactoring.html][Refactoring]]
+   - Kent Beck
+     - [[https://www.amazon.com/Test-Driven-Development-Kent-Beck/dp/0321146530/][Test Driven Development]]
+   - Steve Freeman
+     - [[https://www.amazon.com/Growing-Object-Oriented-Software-Guided-Tests/dp/0321503627][Growing Object Oriented Software, Guided by Tests]]
 
 *** Inverted Pyramid
     :PROPERTIES:
@@ -480,5 +527,3 @@
     http://blogs.agilefaqs.com/2011/02/01/inverting-the-testing-pyramid/
     [[https://testing.googleblog.com/2015/04/just-say-no-to-more-end-to-end-tests.html]]
     [[https://www.youtube.com/watch?v%253DVDfX44fZoMc][Integration Tests Are A Scam (oft-cited talk)]]
-* Extra-credit
-  - Property-based testing.
